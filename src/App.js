@@ -1,24 +1,45 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState,useEffect } from 'react';
 
-function App() {
+
+function App() {//執行setXXX的fuction,改變前者變數
+  const [targetNumber, setTargetNumber] = useState(Math.floor(Math.random() * 100) + 1);//首次預設答案值
+  const [userGuess, setUserGuess] = useState('');//使用者預設值為空
+  const [message, setMessage] = useState('');
+  // 比對玩家是否猜對的函數
+  const handleGuess = () => {
+    const guess = parseInt(userGuess);//parseInt(userGuess, 10)10表示進制的意思可忽略不計
+
+    if (isNaN(guess)) {
+      setMessage('請輸入有效數字！');
+    } else if (guess === targetNumber) {
+      setMessage('恭喜你，猜對了！');
+    } else if (guess < targetNumber) {
+      setMessage('太小了，再試一次。');
+    } else {
+      setMessage('太大了，再試一次。');
+    }
+  };
+  // 處理文本輸入變化的函數
+  const handleInputChange = (e) => {
+    setUserGuess(e.target.value);
+    // e.target(參數=value)
+  };
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+  <h1>猜數字遊戲</h1>
+  <p>
+    <span className="downbounder">1</span>到{" "}
+    <span className="upperbounder">100</span> 之間的數字，你猜是多少？
+  </p>
+  {/* onChange異動時觸發函數 */}
+  <input type="text" id="guessField" value={userGuess} onChange={handleInputChange}/>
+  <input type="submit" value="猜!" id="guessSubmit" onClick={handleGuess}/>
+  <p className="message">{message}</p>
+</>
+
   );
 }
 
